@@ -1,0 +1,47 @@
+name: Deploy 夜市找零 to GitHub Pages
+
+# 只发布 dist/ 里的成品（单文件，全部内嵌），不构建、不装依赖
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'dist/**'
+      - '.github/workflows/pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: 检出仓库
+        uses: actions/checkout@v4
+
+      - name: 准备站点目录
+        run: |
+          mkdir -p _site
+          cp -r dist/. _site/
+          touch _site/.nojekyll
+
+      - name: 配置 Pages
+        uses: actions/configure-pages@v5
+
+      - name: 打包站点
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - name: 发布
+        id: deployment
+        uses: actions/deploy-pages@v4

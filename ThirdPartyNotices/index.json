@@ -1,0 +1,62 @@
+[
+  {
+    "package": "@esbuild/win32-x64",
+    "version": "0.28.2",
+    "license": "MIT",
+    "files": []
+  },
+  {
+    "package": "@playwright/cli",
+    "version": "0.1.23",
+    "license": "Apache-2.0",
+    "files": [
+      "LICENSE"
+    ]
+  },
+  {
+    "package": "@typescript/typescript-win32-x64",
+    "version": "7.0.2",
+    "license": "Apache-2.0",
+    "files": [
+      "LICENSE",
+      "NOTICE.txt"
+    ]
+  },
+  {
+    "package": "esbuild",
+    "version": "0.28.2",
+    "license": "MIT",
+    "files": [
+      "LICENSE.md"
+    ]
+  },
+  {
+    "package": "playwright",
+    "version": "1.65.0-alpha-2026-10-30",
+    "license": "Apache-2.0",
+    "files": [
+      "LICENSE",
+      "NOTICE",
+      "ThirdPartyNotices.txt"
+    ]
+  },
+  {
+    "package": "playwright-core",
+    "version": "1.65.0-alpha-2026-10-30",
+    "license": "Apache-2.0",
+    "files": [
+      "LICENSE",
+      "NOTICE",
+      "ThirdPartyNotices.txt"
+    ]
+  },
+  {
+    "package": "typescript",
+    "version": "7.0.2",
+    "license": "Apache-2.0",
+    "files": [
+      "LICENSE",
+      "NOTICE.txt"
+    ]
+  }
+]

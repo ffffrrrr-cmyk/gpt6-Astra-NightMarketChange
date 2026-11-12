@@ -1,0 +1,35 @@
+async (page) => {
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  const data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.page === 'levels') await page.locator('[data-level="night-01"]').click();
+  else throw new Error('失败验证应从单元选择开始');
+  await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  await page.locator('[data-guest="night-01-guest-6"]').click();
+  await page.locator('[data-action="note5"]').click();
+  await page.locator('[data-action="coin1"]').click();
+  await page.locator('[data-action="coin1"]').click();
+  await page.locator('#submit').click();
+  check((await page.locator('#guide-bar').innerText()).includes('现有零钱已无法凑7元'), '缺少接单风险');
+  await page.locator('#submit').click();
+  const failed = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(failed.state.status === 'lost' && failed.state.failure.includes('零钱不足却接单'), '专属失败未触发');
+  check(failed.state.events.length === 2 && failed.state.cash.tens === 1, '失败扣费或事件数量不正确');
+  await page.screenshot({ path: 'output/playwright/failure.png' });
+  await page.getByRole('button', { name: '复盘账本', exact: true }).click();
+  check((await page.locator('.ledger-list').innerText()).includes(failed.state.failureEventId), '账本未定位失败事件');
+  await page.getByRole('button', { name: '返回', exact: true }).click();
+  await page.getByRole('button', { name: '重试本夜', exact: true }).click();
+  await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  const reset = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(reset.state.cycle === 0 && reset.state.cash.tens === 0 && reset.state.cash.ones === 2, '重试保留了失败收益');
+  const before = JSON.stringify(reset.state);
+  await page.evaluate(() => window.dispatchEvent(new Event('blur')));
+  check((await page.evaluate(() => window.nightMarketDiagnostics().modal)) === 'pause', '失焦没有暂停');
+  await page.getByRole('button', { name: '继续营业', exact: true }).click();
+  check(JSON.stringify(await page.evaluate(() => window.nightMarketDiagnostics().state)) === before, '失焦恢复状态不一致');
+  await page.locator('[data-action="coin1"]').click();
+  await page.getByRole('button', { name: '设置', exact: true }).click();
+  await page.getByRole('button', { name: '完成', exact: true }).click();
+  check(JSON.stringify(await page.evaluate(() => window.nightMarketDiagnostics().state)) === before, '切面板推进了回合');
+  return { result: 'PASS', checks: ['真实零钱不足接单', '失败事件账本', '重试清除分支收益', '失焦事件处理', '切换面板不推进回合'], focusScope: '验证浏览器blur事件处理，未操纵用户系统窗口' };
+}

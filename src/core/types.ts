@@ -1,0 +1,71 @@
+export type Cash = { ones: number; fives: number; tens: number };
+export type Change = { ones: number; fives: number };
+export type Guest = {
+  id: string;
+  name: string;
+  item: string;
+  look: number;
+  payment: Cash;
+  after: string[];
+  earliest: number;
+  latest: number;
+};
+export type Level = {
+  id: string;
+  number: number;
+  name: string;
+  district: string;
+  description: string;
+  lesson: string;
+  difference: string;
+  initial: Cash;
+  capacity: number;
+  guests: Guest[];
+};
+export type Outcome = 'playing' | 'won' | 'lost';
+export type TurnSnapshot = {
+  cash: Cash;
+  served: string[];
+  cycle: number;
+  piecesGiven: number;
+  status: Outcome;
+};
+export type GameEvent = {
+  id: string;
+  commandId: string;
+  cycle: number;
+  target: string;
+  kind: 'service' | 'failure';
+  before: TurnSnapshot;
+  after: TurnSnapshot;
+  payment: Cash;
+  change: Change;
+  reason: string;
+};
+export type GameState = TurnSnapshot & {
+  ruleVersion: 'rmb-1';
+  levelId: string;
+  initialSeed: string;
+  committedIds: string[];
+  events: GameEvent[];
+  pendingPayment: Cash | null;
+  committedOrder: string | null;
+  facility: 'open' | 'closed';
+  failure: string | null;
+  failureEventId: string | null;
+};
+export type Command = { commandId: string; guestId: string; change: Change };
+export type Preview = {
+  legal: boolean;
+  risk: boolean;
+  reason: string;
+  available: Cash;
+  incoming: Cash;
+  next: Cash | null;
+  nextWays: number;
+  pieces: number;
+};
+export type Step = { guestId: string; change: Change };
+export type Solution = { steps: Step[]; pieces: number; minimumOnes: number };
+export const RULE_VERSION = 'rmb-1';
+export const EMPTY_CASH: Cash = { ones: 0, fives: 0, tens: 0 };

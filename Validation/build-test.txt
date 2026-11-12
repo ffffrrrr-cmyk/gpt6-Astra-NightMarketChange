@@ -1,0 +1,57 @@
+
+> night-market-change-0003@1.0.0 typecheck
+> tsc --noEmit
+
+
+> night-market-change-0003@1.0.0 test
+> node --test tests/*.test.mjs
+
+✔ A01: 找零使用旧库存，成功后前客付款才可用且金额守恒 (2.8252ms)
+✔ A02: 6/7/8元边界、非法数量与UI预览一致 (0.3279ms)
+✔ A02: 两种找法独立枚举验证且没有负库存 (0.3373ms)
+✔ A02: 顾客支付9/10/11元只有10元可被接收 (0.2523ms)
+✔ 钱不足且下一回合没有合规客人时立即给出不可达，不能软锁 (0.2331ms)
+✔ A02: 钱盘容量刚低于、等于、高于；10元不占零钱盘 (0.121ms)
+✔ A03: 第7客仍进行、第8客唯一胜利、终局后不可提交 (0.428ms)
+✔ A04: 现金10元但无法找7元，接单失败且不借新客钱 (0.2832ms)
+✔ A04: 构造同时达人数条件与零钱失败的状态，失败优先 (0.1569ms)
+✔ A05: 预览/取消不改状态，同ID和双击不会重复增减 (0.2368ms)
+✔ A06: JSON往返后相同指令产生相同完整事件与状态，重试无分支收益 (0.7333ms)
+✔ 公开前置关系和窗口不能通过选客绕过 (0.1466ms)
+✔ 12关真实规则入口重放所有合法解；安全解和效率解均合法 (37.1103ms)
+✔ 首关容量最小；组合关04–06有不同顺序；10–11双解成本不同 (4.132ms)
+✔ A06/A08: 双槽保存、精确恢复、损坏时回退上一份有效档 (3.5847ms)
+✔ A08: 禁用存储仍可内存通关，进度不伪称已保存 (0.6427ms)
+✔ A08: 不兼容旧档保留，不能用新档覆盖 (0.1869ms)
+✔ A08: 写后校验失败保留有效指针与旧档 (0.2186ms)
+✔ 篡改事件和金额即使重算校验和也被状态重放拒绝 (0.1953ms)
+ℹ tests 19
+ℹ suites 0
+ℹ pass 19
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 189.8992
+
+> night-market-change-0003@1.0.0 validate
+> node scripts/validate-levels.mjs
+
+PASS night-01 第一盏灯: efficient=32 safe=36 margin=2 orders=5 failure=零钱不足却接单：现有零钱无法凑出7元，不能借用当前客人的付款。
+PASS night-02 整钱也会难倒人: efficient=32 safe=32 margin=4 orders=8 failure=零钱不足却接单：现有零钱无法凑出7元，不能借用当前客人的付款。
+PASS night-03 两种找法: efficient=32 safe=36 margin=7 orders=7 failure=零钱不足却接单：现有零钱无法凑出7元，不能借用当前客人的付款。
+PASS night-04 熟客相约: efficient=28 safe=36 margin=5 orders=4 failure=零钱不足却接单：现有零钱无法凑出7元，不能借用当前客人的付款。
+PASS night-05 顺手的人情: efficient=32 safe=36 margin=4 orders=2 failure=目标不可达：余下客人的顺序、约定或零钱盘容量已无法同时满足。
+PASS night-06 两边都要顾: efficient=32 safe=36 margin=6 orders=2 failure=零钱不足却接单：现有零钱无法凑出7元，不能借用当前客人的付款。
+PASS night-07 末班车之前: efficient=28 safe=36 margin=6 orders=7 failure=目标不可达：余下客人的顺序、约定或零钱盘容量已无法同时满足。
+PASS night-08 小小的钱盘: efficient=36 safe=36 margin=7 orders=8 failure=零钱不足却接单：现有零钱无法凑出7元，不能借用当前客人的付款。
+PASS night-09 约好的时辰: efficient=28 safe=36 margin=6 orders=3 failure=目标不可达：余下客人的顺序、约定或零钱盘容量已无法同时满足。
+PASS night-10 从容与利落: efficient=32 safe=36 margin=10 orders=4 failure=零钱不足却接单：现有零钱无法凑出7元，不能借用当前客人的付款。
+PASS night-11 灯火渐阑珊: efficient=32 safe=36 margin=9 orders=2 failure=零钱不足却接单：现有零钱无法凑出7元，不能借用当前客人的付款。
+PASS night-12 这一夜，刚刚好: efficient=36 safe=36 margin=7 orders=2 failure=目标不可达：余下客人的顺序、约定或零钱盘容量已无法同时满足。
+首关可解的最小零钱盘容量：11
+
+> night-market-change-0003@1.0.0 build
+> node scripts/build.mjs
+
+离线构建完成：dist/index.html (78 KiB)。全部代码与样式已内嵌，无运行时网络请求。

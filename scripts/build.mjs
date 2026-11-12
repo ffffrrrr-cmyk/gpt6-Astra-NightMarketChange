@@ -1,0 +1,12 @@
+import { build } from 'esbuild';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { fileURLToPath } from 'node:url';
+const root = new URL('../', import.meta.url);
+await mkdir(new URL('dist/', root), { recursive: true });
+const result = await build({ entryPoints: [fileURLToPath(new URL('src/main.ts', root))], bundle: true, write: false, format: 'iife', target: ['es2022'], minify: true, legalComments: 'none', logLevel: 'info' });
+const script = result.outputFiles[0].text.replaceAll('</script', '<\\/script');
+const style = await readFile(new URL('src/style.css', root), 'utf8');
+const template = await readFile(new URL('index.html', root), 'utf8');
+const html = template.replace('<!-- APP_STYLE -->', () => `<style>${style}</style>`).replace('<!-- APP_SCRIPT -->', () => `<script>${script}</script>`);
+await writeFile(new URL('dist/index.html', root), html);
+console.log(`离线构建完成：dist/index.html (${Math.round(Buffer.byteLength(html) / 1024)} KiB)。全部代码与样式已内嵌，无运行时网络请求。`);

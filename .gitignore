@@ -1,0 +1,7 @@
+node_modules/
+.npm-cache/
+.playwright-cli/
+output/playwright/.cache/
+dist/
+Delivery/
+*.tmp

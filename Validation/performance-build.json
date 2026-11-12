@@ -1,0 +1,5 @@
+{
+  "buildSha256": "371c4d6915c3825ed29187aff0f06550790ebd35d44659f6a0781ba62b5a1e8d",
+  "scenario": "night-12, 1920x1080, fixed idle animated scene",
+  "note": "性能场景版本；后续只调整存储警告布局，普通无警告场景绘制路径保持一致"
+}

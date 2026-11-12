@@ -1,0 +1,1 @@
+[{"scenario":"损坏档恢复并完成结算","result":"PASS","recoveredCycle":2},{"scenario":"禁用存储仍能首关通关","result":"PASS","served":8,"bounds":[{"selector":"#submit","bottom":610.40625,"visible":true},{"selector":"#guide-bar","bottom":677,"visible":true},{"selector":"#progress-strip","bottom":339,"visible":true},{"selector":".queue-footer","bottom":694,"visible":true}]}]

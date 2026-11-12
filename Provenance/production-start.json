@@ -1,0 +1,25 @@
+{
+  "projectId": "FR-0003",
+  "name": "夜市找零",
+  "source": "new_production",
+  "startedAt": "2026-11-09T18:06:29+08:00",
+  "agent": "Codex",
+  "modelIdentifier": "gpt-6-astra",
+  "modelEvidence": "当前会话开发者上下文明确声明：The current model is gpt-6-astra.",
+  "procurementFamily": "6astra",
+  "provider": "OpenAI",
+  "preciseBuildVersion": null,
+  "subscription": null,
+  "threadId": "01a1bfb2-7f05-73f3-8629-ad06ed3e7f03",
+  "threadEvidence": "本会话open_in_codex工具返回的threadId",
+  "procurementVerification": "模型标识可核验；具体服务版本、套餐及采购方版本认可待补齐，不声明采购合格",
+  "sourceHash": "1d5cd682e9e74e7f3e170dd4da4b3929fc8952defa3200b5a92d8e5cc896820c",
+  "userDecisions": [
+    "允许按现有材料实施，缺失通用规范核对待补",
+    "使用真实人民币面额，重新调整规则"
+  ],
+  "implementationInterpretation": "1元硬币、5元与10元纸币；收10找7；取消固定三枚，允许5+1+1或七枚1元；首关前客留存7元，8客计数从0开始",
+  "rolloutEvidence": "当前Codex会话中的用户消息、工具调用与结果；本JSON为来源索引，不是原始rollout导出",
+  "buildHash": "62b3da40876688b05514614240ab5c5a6f648205a341ae5568b00cb764a8fa34",
+  "correspondingSourceManifest": "Validation/source-manifest.json"
+}

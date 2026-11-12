@@ -1,0 +1,372 @@
+### Result
+{"result":"PASS","levelId":"night-01","viewport":{"width":1280,"height":720},"orders":8,"pieces":32,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-01","efficient":{"steps":[{"guestId":"night-01-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-01-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-01-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-01-guest-5","change":{"ones":2,"fives":1}},{"guestId":"night-01-guest-6","change":{"ones":2,"fives":1}},{"guestId":"night-01-guest-2","change":{"ones":7,"fives":0}},{"guestId":"night-01-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-01-guest-7","change":{"ones":7,"fives":0}}],"pieces":32,"minimumOnes":2}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-02","viewport":{"width":1280,"height":720},"orders":8,"pieces":32,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-02","efficient":{"steps":[{"guestId":"night-02-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-02-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-02-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-02-guest-6","change":{"ones":7,"fives":0}},{"guestId":"night-02-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-02-guest-7","change":{"ones":2,"fives":1}},{"guestId":"night-02-guest-5","change":{"ones":2,"fives":1}},{"guestId":"night-02-guest-8","change":{"ones":7,"fives":0}}],"pieces":32,"minimumOnes":4}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-03","viewport":{"width":1280,"height":720},"orders":8,"pieces":32,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-03","efficient":{"steps":[{"guestId":"night-03-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-03-guest-2","change":{"ones":7,"fives":0}},{"guestId":"night-03-guest-5","change":{"ones":2,"fives":1}},{"guestId":"night-03-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-03-guest-6","change":{"ones":2,"fives":1}},{"guestId":"night-03-guest-7","change":{"ones":2,"fives":1}},{"guestId":"night-03-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-03-guest-3","change":{"ones":7,"fives":0}}],"pieces":32,"minimumOnes":7}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-04","viewport":{"width":1280,"height":720},"orders":8,"pieces":28,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-04","efficient":{"steps":[{"guestId":"night-04-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-04-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-04-guest-5","change":{"ones":2,"fives":1}},{"guestId":"night-04-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-04-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-04-guest-7","change":{"ones":2,"fives":1}},{"guestId":"night-04-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-04-guest-6","change":{"ones":7,"fives":0}}],"pieces":28,"minimumOnes":5}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-05","viewport":{"width":1280,"height":720},"orders":8,"pieces":32,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-05","efficient":{"steps":[{"guestId":"night-05-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-05-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-05-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-05-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-05-guest-5","change":{"ones":7,"fives":0}},{"guestId":"night-05-guest-7","change":{"ones":7,"fives":0}},{"guestId":"night-05-guest-6","change":{"ones":2,"fives":1}},{"guestId":"night-05-guest-8","change":{"ones":2,"fives":1}}],"pieces":32,"minimumOnes":4}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-06","viewport":{"width":1280,"height":720},"orders":8,"pieces":32,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-06","efficient":{"steps":[{"guestId":"night-06-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-06-guest-5","change":{"ones":2,"fives":1}},{"guestId":"night-06-guest-6","change":{"ones":7,"fives":0}},{"guestId":"night-06-guest-7","change":{"ones":2,"fives":1}},{"guestId":"night-06-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-06-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-06-guest-3","change":{"ones":7,"fives":0}},{"guestId":"night-06-guest-4","change":{"ones":2,"fives":1}}],"pieces":32,"minimumOnes":6}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-07","viewport":{"width":1280,"height":720},"orders":8,"pieces":28,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-07","efficient":{"steps":[{"guestId":"night-07-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-07-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-07-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-07-guest-4","change":{"ones":7,"fives":0}},{"guestId":"night-07-guest-6","change":{"ones":2,"fives":1}},{"guestId":"night-07-guest-5","change":{"ones":2,"fives":1}},{"guestId":"night-07-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-07-guest-7","change":{"ones":2,"fives":1}}],"pieces":28,"minimumOnes":6}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-08","viewport":{"width":1280,"height":720},"orders":8,"pieces":36,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-08","efficient":{"steps":[{"guestId":"night-08-guest-1","change":{"ones":7,"fives":0}},{"guestId":"night-08-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-08-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-08-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-08-guest-6","change":{"ones":7,"fives":0}},{"guestId":"night-08-guest-5","change":{"ones":7,"fives":0}},{"guestId":"night-08-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-08-guest-7","change":{"ones":2,"fives":1}}],"pieces":36,"minimumOnes":7}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-09","viewport":{"width":1280,"height":720},"orders":8,"pieces":28,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-09","efficient":{"steps":[{"guestId":"night-09-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-09-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-09-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-09-guest-4","change":{"ones":7,"fives":0}},{"guestId":"night-09-guest-6","change":{"ones":2,"fives":1}},{"guestId":"night-09-guest-5","change":{"ones":2,"fives":1}},{"guestId":"night-09-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-09-guest-7","change":{"ones":2,"fives":1}}],"pieces":28,"minimumOnes":6}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-10","viewport":{"width":1280,"height":720},"orders":8,"pieces":32,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-10","efficient":{"steps":[{"guestId":"night-10-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-10-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-10-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-10-guest-5","change":{"ones":7,"fives":0}},{"guestId":"night-10-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-10-guest-6","change":{"ones":7,"fives":0}},{"guestId":"night-10-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-10-guest-7","change":{"ones":2,"fives":1}}],"pieces":32,"minimumOnes":10}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-11","viewport":{"width":1280,"height":720},"orders":8,"pieces":32,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-11","efficient":{"steps":[{"guestId":"night-11-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-11-guest-2","change":{"ones":2,"fives":1}},{"guestId":"night-11-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-11-guest-7","change":{"ones":2,"fives":1}},{"guestId":"night-11-guest-5","change":{"ones":2,"fives":1}},{"guestId":"night-11-guest-3","change":{"ones":7,"fives":0}},{"guestId":"night-11-guest-8","change":{"ones":2,"fives":1}},{"guestId":"night-11-guest-6","change":{"ones":7,"fives":0}}],"pieces":32,"minimumOnes":9}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```
+### Result
+{"result":"PASS","levelId":"night-12","viewport":{"width":1280,"height":720},"orders":8,"pieces":36,"bounds":[{"selector":"#submit","visible":true},{"selector":"#guide-bar","visible":true},{"selector":"#progress-strip","visible":true},{"selector":"#cash-items","visible":true},{"selector":".queue-footer","visible":true}]}
+### Ran Playwright code
+```js
+await (async (page) => {
+  const report = {"levelId":"night-12","efficient":{"steps":[{"guestId":"night-12-guest-1","change":{"ones":2,"fives":1}},{"guestId":"night-12-guest-2","change":{"ones":7,"fives":0}},{"guestId":"night-12-guest-3","change":{"ones":2,"fives":1}},{"guestId":"night-12-guest-4","change":{"ones":2,"fives":1}},{"guestId":"night-12-guest-5","change":{"ones":7,"fives":0}},{"guestId":"night-12-guest-7","change":{"ones":2,"fives":1}},{"guestId":"night-12-guest-6","change":{"ones":7,"fives":0}},{"guestId":"night-12-guest-8","change":{"ones":2,"fives":1}}],"pieces":36,"minimumOnes":7}};
+  const check = (condition, message) => { if (!condition) throw new Error(message); };
+  let data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'result' && data.state.status === 'won') await page.getByRole('button', { name: '下一夜', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  if (data.modal === 'intro') await page.getByRole('button', { name: '点灯营业', exact: true }).click();
+  data = await page.evaluate(() => window.nightMarketDiagnostics());
+  check(data.levelId === report.levelId && data.state.cycle === 0, `关卡初态不匹配：${data.levelId}/${data.state.cycle}`);
+  const bounds = await page.evaluate(() => ['#submit', '#guide-bar', '#progress-strip', '#cash-items', '.queue-footer'].map(selector => { const rect = document.querySelector(selector).getBoundingClientRect(); return { selector, visible: rect.top >= 0 && rect.bottom <= innerHeight + 1 && rect.right <= innerWidth }; }));
+  check(bounds.every(item => item.visible), `布局越界：${JSON.stringify(bounds)}`);
+  for (const [index, step] of report.efficient.steps.entries()) {
+    await page.locator(`[data-action="guest"][data-guest="${step.guestId}"]`).click();
+    for (let count = 0; count < step.change.fives; count++) await page.locator('[data-action="note5"]').click();
+    for (let count = 0; count < step.change.ones; count++) await page.locator('[data-action="coin1"]').click();
+    if (index % 2) await page.locator('#submit').click();
+    else await page.keyboard.press('Enter');
+    data = await page.evaluate(() => window.nightMarketDiagnostics());
+    check(data.state.served.length === index + 1, `${report.levelId}第${index + 1}客失败：${data.state.failure}`);
+    check(data.state.cycle === index + 1, '重复结账');
+  }
+  check(data.modal === 'result' && data.state.status === 'won', '缺少胜利结算');
+  check(data.state.piecesGiven === report.efficient.pieces, '浏览器与内核计分不一致');
+  return { result: 'PASS', levelId: report.levelId, viewport: page.viewportSize(), orders: data.state.served.length, pieces: data.state.piecesGiven, bounds };
+}
+)(page);
+```

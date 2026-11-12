@@ -1,0 +1,93 @@
+{
+  "status": "PASS_MEASURED_SCENE",
+  "startedAt": "2026-11-09T10:44:15.223Z",
+  "endedAt": "2026-11-09T10:59:15.730Z",
+  "elapsedSeconds": 900.507,
+  "activeSeconds": 900.5066,
+  "sampleCount": 16,
+  "frames": 129315,
+  "averageFps": 143.60250108105814,
+  "p95FrameIntervalMs": 7.6,
+  "longFramesOver50ms": 0,
+  "dom": {
+    "nodes": [
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359,
+      359
+    ],
+    "listeners": [
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26,
+      26
+    ],
+    "documents": [
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2,
+      2
+    ]
+  },
+  "heapBytesAfterExplicitGC": {
+    "first": 2212588,
+    "last": 2174668,
+    "minimum": 2169788,
+    "maximum": 2241936
+  },
+  "environment": {
+    "cpu": "Intel Core i5-14400F",
+    "logicalProcessors": 16,
+    "ramGiB": 32,
+    "windows": "10.0.19044 x64",
+    "browser": "157.0.8103.39",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "headless": true
+  },
+  "measuredBuild": {
+    "buildSha256": "371c4d6915c3825ed29187aff0f06550790ebd35d44659f6a0781ba62b5a1e8d",
+    "scenario": "night-12, 1920x1080, fixed idle animated scene",
+    "note": "性能场景版本；后续只调整存储警告布局，普通无警告场景绘制路径保持一致"
+  },
+  "method": "独立Chrome固定第12关、8客与蒸气动画、无业务输入，每60秒一次CDP采样；每次显式GC后记录JS堆及DOM数量。帧间隔直方图0.1ms精度、固定内存，覆盖该场景整个生命周期（含正式采样前约38秒）；平均FPS用首末采样差计算。",
+  "limitations": "后台固定场景观测，不替代用户前台手感，不覆盖所有设备。测量版本随后仅增加存储警告状态下的布局处理；普通无警告第12关绘制逻辑无改动，最终归档的完整15分钟未重跑。"
+}
